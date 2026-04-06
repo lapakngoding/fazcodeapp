@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">{{ title }}</h1>
+    <a href="{% url 'rental:admin_galeri_list' %}" class="btn btn-secondary btn-sm shadow-sm">
+        <i class="fas fa-arrow-left fa-sm"></i> Kembali
+    </a>
+</div>
+
+<div class="row">
+    <div class="col-lg-6 mx-auto">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Upload Foto Dokumentasi Afifah Kreatif</h6>
+            </div>
+            <div class="card-body">
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    <div class="form-group mb-3">
+                        <label class="font-weight-bold text-dark">Judul Foto / Nama Acara</label>
+                        {{ form.judul }}
+                        <small class="text-muted">Contoh: Dekorasi Tenda Pernikahan di Jakarta Barat</small>
+                        {% if form.judul.errors %}<small class="text-danger">{{ form.judul.errors }}</small>{% endif %}
+                    </div>
+
+                    <div class="form-group mb-4">
+                        <label class="font-weight-bold text-dark">Pilih File Gambar</label>
+                        <div class="custom-file">
+                            {{ form.gambar }}
+                        </div>
+                        <small class="text-muted d-block mt-1">Format: JPG, PNG, atau JPEG. Maks 2MB disarankan.</small>
+                        {% if form.gambar.errors %}<small class="text-danger">{{ form.gambar.errors }}</small>{% endif %}
+                    </div>
+
+                    <hr>
+                    <button type="submit" class="btn btn-success btn-block">
+                        <i class="fas fa-upload mr-2"></i> Unggah Sekarang
+                    </button>
+                </form>
+            </div>
+        </div>
+        
+        <div class="card shadow mb-4">
+            <div class="card-body text-center bg-light">
+                <small class="text-muted">Pratinjau gambar akan muncul di halaman depan setelah diunggah.</small>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

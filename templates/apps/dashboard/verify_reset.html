@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block content %}
+<h1 class="h3 mb-4 text-gray-800">Verifikasi Reset Password</h1>
+
+<div class="card shadow mb-4">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Email</th>
+                        <th>Waktu Request</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for r in reset_requests %}
+                    <tr>
+                        <td>{{ r.user.username }}</td>
+                        <td>{{ r.user.email }}</td>
+                        <td>{{ r.created_at|date:"d M Y H:i" }}</td>
+                        <td>
+                            <form method="POST" action="{% url 'dashboard:approve_reset' r.id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-success btn-sm">Approve & Kirim Email</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="4" class="text-center">Tidak ada permintaan pending.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

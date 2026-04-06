@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Galeri Dokumentasi</h1>
+    <a href="{% url 'rental:admin_galeri_add' %}" class="btn btn-primary btn-sm">
+        <i class="fas fa-upload fa-sm"></i> Upload Foto
+    </a>
+</div>
+
+<div class="row">
+    {% for f in fotos %}
+    <div class="col-md-3 mb-4">
+        <div class="card shadow h-100">
+            <img src="{{ f.gambar.url }}" class="card-img-top" style="height: 150px; object-fit: cover;">
+            <div class="card-body p-2 text-center">
+                <small class="font-weight-bold d-block">{{ f.judul }}</small>
+                <button type="button" class="btn btn-danger btn-sm mt-2" data-toggle="modal" data-target="#deleteFoto{{ f.pk }}">
+                    <i class="fas fa-trash"></i> Hapus
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="deleteFoto{{ f.pk }}" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-body text-center">
+                    <p>Hapus foto <strong>{{ f.judul }}</strong>?</p>
+                    <form method="POST" action="{% url 'rental:admin_galeri_delete' f.pk %}">
+                        {% csrf_token %}
+                        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-danger btn-sm">Ya, Hapus</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>    
+
+    {% empty %}
+    <div class="col-12 text-center text-muted">Belum ada dokumentasi foto.</div>
+    {% endfor %}
+</div>
+{% endblock %}

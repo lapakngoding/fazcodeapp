@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Dashboard Utama</h1>
+    <small class="text-muted">{{ str_today|default:"Selamat Datang, " }}{{ request.user.username }}</small>
+</div>
+
+<div class="row">
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Total Pengguna</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ total_user }}</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-users fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-success shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">User Aktif</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ user_aktif }}</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-user-check fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-warning shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Menunggu Reset</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ pending_reset }}</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-key fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-info shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Role Anda</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                            {% if request.user.is_superuser %}Superadmin{% else %}Staff{% endif %}
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-shield-alt fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">Aktivitas Terbaru Sistem</h6>
+                <a href="{% url 'dashboard:activity_log' %}" class="btn btn-sm btn-primary">Lihat Semua</a>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-sm table-hover">
+                        <thead class="bg-light">
+                            <tr>
+                                <th>User</th>
+                                <th>Aksi</th>
+                                <th>Waktu</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for log in recent_logs %}
+                            <tr>
+                                <td><strong>{{ log.user.username }}</strong></td>
+                                <td><small>{{ log.keterangan|truncatechars:50 }}</small></td>
+                                <td><small class="text-muted">{{ log.timestamp|timesince }} yang lalu</small></td>
+                            </tr>
+                            {% empty %}
+                            <tr><td colspan="3" class="text-center">Belum ada aktivitas.</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="card shadow mb-4 text-white bg-primary">
+            <div class="card-body">
+                <h5 class="font-weight-bold">Halo, {{ request.user.username }}!</h5>
+                <p class="small">Selamat bekerja di sistem <strong>Fazcodeapp</strong>. Gunakan sidebar sebelah kiri untuk mengelola data akademik dan pengaturan sistem.</p>
+                <hr class="border-light">
+                <div class="small">IP Anda: <code>{{ request.META.REMOTE_ADDR }}</code></div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

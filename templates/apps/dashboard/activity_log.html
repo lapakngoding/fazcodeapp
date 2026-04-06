@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    /* Style untuk Timeline */
+    .timeline { position: relative; padding: 20px 0; list-style: none; }
+    .timeline:before {
+        content: ""; position: absolute; top: 0; bottom: 0; left: 40px;
+        width: 2px; background: #e3e6f0;
+    }
+    .timeline > li { position: relative; margin-bottom: 20px; padding-left: 70px; }
+    .timeline > li .timeline-icon {
+        position: absolute; left: 25px; top: 5px; width: 32px; height: 32px;
+        border-radius: 50%; text-align: center; line-height: 32px; color: #fff;
+        z-index: 100;
+    }
+    .bg-create { background-color: #1cc88a; } /* Hijau */
+    .bg-update { background-color: #4e73df; } /* Biru */
+    .bg-delete { background-color: #e74a3b; } /* Merah */
+    .bg-login { background-color: #f6c23e; }  /* Kuning */
+</style>
+
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Log Aktivitas Sistem (CCTV)</h1>
+    <span class="badge badge-primary px-3 py-2 shadow-sm">Superadmin Mode</span>
+</div>
+
+<div class="row">
+    <div class="col-lg-10 mx-auto">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                <h6 class="m-0 font-weight-bold text-primary">100 Aktivitas Terakhir</h6>
+                <small class="text-muted">Terurut dari yang terbaru</small>
+            </div>
+            <div class="card-body">
+                <ul class="timeline">
+                    {% for log in logs %}
+                    <li>
+                        <div class="timeline-icon 
+                            {% if log.aksi == 'CREATE' %}bg-create
+                            {% elif log.aksi == 'UPDATE' %}bg-update
+                            {% elif log.aksi == 'DELETE' %}bg-delete
+                            {% else %}bg-login{% endif %}">
+                            <i class="fas 
+                                {% if log.aksi == 'CREATE' %}fa-plus
+                                {% elif log.aksi == 'UPDATE' %}fa-edit
+                                {% elif log.aksi == 'DELETE' %}fa-trash
+                                {% else %}fa-key{% endif %} fa-sm"></i>
+                        </div>
+                        
+                        <div class="card border-left-primary shadow-sm mb-2">
+                            <div class="card-body py-2">
+                                <div class="d-flex justify-content-between">
+                                    <h6 class="font-weight-bold text-dark mb-1">
+                                        {{ log.user.username|default:"System/Deleted User" }}
+                                    </h6>
+                                    <small class="text-primary font-italic">
+                                        <i class="fas fa-clock fa-xs"></i> {{ log.timestamp|date:"d M Y - H:i" }}
+                                    </small>
+                                </div>
+                                <p class="mb-1 text-gray-800">{{ log.keterangan }}</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="badge badge-light border text-uppercase" style="font-size: 10px;">
+                                        Tabel: {{ log.tabel }}
+                                    </span>
+                                    <small class="text-muted" style="font-size: 10px;">
+                                        <i class="fas fa-network-wired"></i> IP: {{ log.ip_address }}
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    {% empty %}
+                    <div class="text-center py-5">
+                        <i class="fas fa-history fa-3x text-gray-300 mb-3"></i>
+                        <p class="text-gray-500">Belum ada aktivitas yang tercatat.</p>
+                    </div>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

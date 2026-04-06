@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Manajemen Hero Slider</h1>
+    <a href="{% url 'rental:admin_hero_add' %}" class="btn btn-primary btn-sm">
+        <i class="fas fa-plus fa-sm"></i> Tambah Slide
+    </a>
+</div>
+
+<div class="card shadow mb-4">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Urutan</th>
+                        <th>Preview</th>
+                        <th>Judul Utama</th>
+                        <th>Status</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for s in slides %}
+                    <tr>
+                        <td>{{ s.order }}</td>
+                        <td><img src="{{ s.gambar_bg.url }}" width="100" class="rounded"></td>
+                        <td>{{ s.judul_utama }}</td>
+                        <td>
+                            {% if s.is_active %}
+                            <span class="badge badge-success">Aktif</span>
+                            {% else %}
+                            <span class="badge badge-secondary">Non-Aktif</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <form method="POST" action="{% url 'rental:admin_hero_delete' s.pk %}" style="display:inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Hapus slide ini?')"><i class="fas fa-trash"></i></button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

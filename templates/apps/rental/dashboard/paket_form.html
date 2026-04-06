@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">{{ title }}</h1>
+    <a href="{% url 'rental:admin_paket_list' %}" class="btn btn-secondary btn-sm shadow-sm">
+        <i class="fas fa-arrow-left fa-sm"></i> Kembali
+    </a>
+</div>
+
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Form Detail Paket Afifah Kreatif</h6>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    {% csrf_token %}
+                    
+                    <div class="form-group mb-3">
+                        <label class="font-weight-bold text-dark">Nama Paket</label>
+                        {{ form.nama }}
+                        {% if form.nama.errors %}<small class="text-danger">{{ form.nama.errors }}</small>{% endif %}
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label class="font-weight-bold text-dark">Harga (Rp)</label>
+                        {{ form.harga }}
+                        {% if form.harga.errors %}<small class="text-danger">{{ form.harga.errors }}</small>{% endif %}
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label class="font-weight-bold text-dark">Fitur Paket</label>
+                        {{ form.fitur }}
+                        <small class="text-muted">Masukkan setiap fitur di baris baru atau pisahkan dengan koma.</small>
+                        {% if form.fitur.errors %}<small class="text-danger">{{ form.fitur.errors }}</small>{% endif %}
+                    </div>
+
+                    <div class="form-group mb-4">
+                        <div class="custom-control custom-checkbox">
+                            {{ form.is_featured }}
+                            <label class="custom-control-label font-weight-bold" for="{{ form.is_featured.id_for_label }}">
+                                Tandai sebagai Best Seller (Tampilkan badge khusus)
+                            </label>
+                        </div>
+                    </div>
+
+                    <hr>
+                    <button type="submit" class="btn btn-primary btn-block">
+                        <i class="fas fa-save mr-2"></i> Simpan Data Paket
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

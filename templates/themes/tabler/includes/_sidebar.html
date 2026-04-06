@@ -1,0 +1,29 @@
+<div class="collapse navbar-collapse" id="sidebar-menu">
+    <ul class="navbar-nav pt-lg-3">
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'dashboard:index' %}">
+                <span class="nav-link-icon d-md-none d-lg-inline-block">
+                    <i class="fas fa-home"></i>
+                </span>
+                <span class="nav-link-title">Dashboard</span>
+            </a>
+        </li>
+        
+        
+
+        {% if user.role == 'ADMIN' or user.role == 'SUPERADMIN' %}
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#navbar-extra" data-bs-toggle="dropdown" role="button" aria-expanded="false">
+                <span class="nav-link-icon d-md-none d-lg-inline-block">
+                    <i class="fas fa-user-shield"></i>
+                </span>
+                <span class="nav-link-title">Administrator</span>
+            </a>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" href="{% url 'dashboard:user_list' %}">Manage Roles</a>
+                <a class="dropdown-item" href="{% url 'dashboard:site_settings' %}">Site Settings</a>
+            </div>
+        </li>
+        {% endif %}
+    </ul>
+</div>

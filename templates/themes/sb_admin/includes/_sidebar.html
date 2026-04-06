@@ -1,0 +1,60 @@
+<li class="nav-item {% if request.resolver_match.url_name == 'index' %}active{% endif %}">
+    <a class="nav-link" href="{% url 'dashboard:index' %}">
+        <i class="fas fa-fw fa-tachometer-alt"></i>
+        <span>Dashboard</span>
+    </a>
+</li>
+<li class="nav-item {% if request.resolver_match.url_name == 'profile' %}active{% endif %}">
+    <a class="nav-link" href="{% url 'dashboard:profile' %}">
+        <i class="fas fa-fw fa-user"></i>
+        <span>Profil Saya</span>
+    </a>
+</li>
+
+{% if user.role == 'ADMIN' or user.role == 'SUPERADMIN' %}
+<hr class="sidebar-divider">
+<div class="sidebar-heading">Administrator</div>
+<hr class="sidebar-divider">
+<div class="sidebar-heading">Logs</div>
+
+<li class="nav-item {% if request.resolver_match.url_name == 'activity_log' %}active{% endif %}">
+    <a class="nav-link" href="{% url 'dashboard:activity_log' %}">
+        <i class="fas fa-fw fa-history"></i>
+        <span>Log Aktivitas</span>
+    </a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'dashboard:user_list' %}">
+        <i class="fas fa-fw fa-users-cog"></i>
+        <span>User Management</span>
+    </a>
+</li>
+
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'dashboard:site_settings' %}">
+        <i class="fas fa-fw fa-cogs"></i>
+        <span>Site Settings</span>
+    </a>
+    <a class="nav-link" href="{% url 'rental:admin_paket_list' %}">
+        <i class="fas fa-fw fa-list"></i>
+        <span>Konten Web</span>
+    </a>
+    <a class="nav-link" href="{% url 'rental:admin_galeri_list' %}">
+        <i class="fas fa-fw fa-photo-video"></i>
+        <span>Galeri</span>
+    </a>
+     <a class="nav-link" href="{% url 'rental:admin_hero_list' %}">
+        <i class="fas fa-fw fa-photo-video"></i>
+        <span>Banner</span>
+    </a>
+</li>
+<li class="nav-item {% if request.resolver_match.url_name == 'verify_reset' %}active{% endif %}">
+    <a class="nav-link" href="{% url 'dashboard:verify_reset' %}">
+        <i class="fas fa-fw fa-user-shield"></i>
+        <span>Verifikasi Reset</span>
+        {% if pending_reset_count > 0 %}
+            <span class="badge badge-danger badge-counter">{{ pending_reset_count }}</span>
+        {% endif %}
+    </a>
+</li>
+{% endif %}

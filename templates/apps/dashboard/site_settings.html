@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-6">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Konfigurasi Tampilan</h6>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label>Nama Aplikasi</label>
+                        {{ form.site_name }}
+                    </div>
+                    <div class="form-group">
+                        <label>Pilih Tema Aktif</label>
+                        {{ form.active_theme }}
+                        <small class="text-muted text-italic">*Pastikan folder tema tersedia di /templates/themes/</small>
+                    </div>
+                    <button type="submit" class="btn btn-success btn-icon-split">
+                        <span class="text">Simpan Perubahan</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

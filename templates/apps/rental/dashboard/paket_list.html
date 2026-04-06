@@ -1,0 +1,65 @@
+{% extends "base.html" %} {% block content %}
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Manajemen Paket Sewa</h1>
+    <a href="{% url 'rental:admin_paket_add' %}" class="btn btn-primary btn-sm shadow-sm">
+        <i class="fas fa-plus fa-sm"></i> Tambah Paket
+    </a>
+</div>
+
+<div class="card shadow mb-4">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+                <thead class="thead-light">
+                    <tr>
+                        <th>Nama Paket</th>
+                        <th>Harga</th>
+                        <th class="text-center">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for p in pakets %}
+                    <tr>
+                        <td>
+                            <strong>{{ p.nama }}</strong>
+                            {% if p.is_featured %}<span class="badge badge-warning ml-2">Best Seller</span>{% endif %}
+                        </td>
+                        <td>Rp {{ p.harga|floatformat:"0" }}</td>
+                        <td class="text-center">
+                            <a href="{% url 'rental:admin_paket_edit' p.pk %}" class="btn btn-warning btn-sm">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            
+                            <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deletePaket{{ p.pk }}">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+
+                    <div class="modal fade" id="deletePaket{{ p.pk }}" tabindex="-1" role="dialog">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Hapus Paket?</h5>
+                                    <button class="close" type="button" data-dismiss="modal"><span>&times;</span></button>
+                                </div>
+                                <div class="modal-body">
+                                    Yakin ingin menghapus <strong>{{ p.nama }}</strong>? Paket ini tidak akan muncul lagi di website utama.
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Batal</button>
+                                    <form method="POST" action="{% url 'rental:admin_paket_delete' p.pk %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-danger">Hapus Permanen</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
