@@ -1,4 +1,7 @@
 # Mengabaikan virtual environment
+__pycache__/
+*.pyc
+*.pyo
 venv/
 .venv/
 env/
