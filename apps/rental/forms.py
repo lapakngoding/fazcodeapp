@@ -24,8 +24,9 @@ class GaleriForm(forms.ModelForm):
 class HeroSliderForm(forms.ModelForm):
     class Meta:
         model = HeroSlider
-        fields = ['sub_judul', 'judul_utama', 'deskripsi', 'gambar_bg', 'order', 'is_active']
+        fields = ['logo','sub_judul', 'judul_utama', 'deskripsi', 'gambar_bg', 'order', 'is_active']
         widgets = {
+            'logo': forms.FileInput(attrs={'class': 'form-control-file'}),
             'sub_judul': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Misal: Sejak 2010'}),
             'judul_utama': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Afifah Kreatif'}),
             'deskripsi': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),

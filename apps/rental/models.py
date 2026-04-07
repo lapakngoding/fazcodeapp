@@ -18,6 +18,7 @@ class Galeri(models.Model):
         return self.judul
 
 class HeroSlider(models.Model):
+    logo = models.ImageField(upload_to='hero/', help_text="Ukuran rekomendasi 1:1")
     sub_judul = models.CharField(max_length=200, help_text="Teks kecil di atas judul utama")
     judul_utama = models.CharField(max_length=100)
     deskripsi = models.TextField()
