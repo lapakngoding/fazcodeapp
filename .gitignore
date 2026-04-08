@@ -6,3 +6,4 @@ venv/
 .venv/
 env/
 ENV/
+db.sqlite3
