@@ -3,29 +3,17 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from apps.accounts.decorators import admin_only
 from apps.dashboard.models import AuditLog # Tetap bisa akses model AuditLog
-from .models import PaketSewa, Galeri, HeroSlider, NamaWebsite
-from .forms import PaketSewaForm, GaleriForm, HeroSliderForm, NamaWebsiteForm
+from .models import PaketSewa, Galeri, HeroSlider
+from .forms import PaketSewaForm, GaleriForm, HeroSliderForm
 
 def get_client_ip(request):
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
     return x_forwarded_for.split(',')[0] if x_forwarded_for else request.META.get('REMOTE_ADDR')
 
-@login_required
-@admin_only
-def edit_profile_web(request):
-    # Ambil data pertama (atau buat baru jika belum ada)
-    profile, created = NamaWebsite.objects.get_or_create(id=1)
-    
-    if request.method == 'POST':
-        form = NamaWebsiteForm(request.POST, instance=profile)
-        if form.is_valid():
-            form.save()
-            messages.success(request, "Profil web berhasil diperbarui!")
-            return redirect('rental:edit_profile_web')
-    else:
-        form = NamaWebsiteForm(instance=profile)
-        
-    return render(request, 'apps/rental/dashboard/edit_profile.html', {'form': form})
+def landing_page(request):
+    # Ambil semua paket, urutkan dari yang termurah
+    pakets = PaketSewa.objects.all().order_by('harga')
+    return render(request, 'apps/rental/landing.html', {'pakets': pakets})
 
 @login_required
 @admin_only
@@ -148,17 +136,14 @@ def admin_galeri_delete(request, pk):
 def landing_page(request):
     slides = HeroSlider.objects.filter(is_active=True)
     pakets = PaketSewa.objects.all().order_by('harga')
-    fotos = Galeri.objects.all().order_by('-created_at')[:6]
-    webinfo = NamaWebsite.objects.first()
-
-    print("WEBINFO:", webinfo)  # sekarang pasti muncul
+    fotos = Galeri.objects.all().order_by('-created_at')[:6] # Ambil 6 foto terbaru
 
     return render(request, 'apps/rental/landing.html', {
         'slides': slides,
         'pakets': pakets, 
-        'fotos': fotos,
-        'webinfo': webinfo,  # 🔥 WAJIB ADA
+        'fotos': fotos
     })
+
 @login_required
 @admin_only
 def admin_hero_list(request):
@@ -190,6 +175,7 @@ def admin_hero_delete(request, pk):
         slide = get_object_or_404(HeroSlider, pk=pk)
         judul = slide.judul_utama
         slide.gambar_bg.delete()
+        slide.logo.delete()
         slide.delete()
         messages.success(request, f"Slide '{judul}' berhasil dihapus.")
     return redirect('rental:admin_hero_list')

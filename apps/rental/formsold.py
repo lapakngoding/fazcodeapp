@@ -1,33 +1,5 @@
 from django import forms
-from .models import PaketSewa, Galeri, HeroSlider, NamaWebsite
-
-class NamaWebsiteForm(forms.ModelForm):
-    class Meta:
-        model = NamaWebsite
-        fields = ['nama_web','address','google_maps_url','phone','email']
-        widgets = {
-            'nama_web': forms.TextInput(attrs={
-                'class': 'form-control form-control-lg', 
-                'placeholder': 'Contoh: Afifah Kreatif'
-            }),
-            'phone': forms.TextInput(attrs={
-                'class': 'form-control', 
-                'placeholder': '0812-xxxx-xxxx'
-            }),
-            'email': forms.EmailInput(attrs={
-                'class': 'form-control', 
-                'placeholder': 'kontak@afifahkreatif.com'
-            }),
-            'address': forms.Textarea(attrs={
-                'class': 'form-control', 
-                'rows': 3, 
-                'placeholder': 'Alamat Kantor'
-            }),
-            'google_maps_url': forms.TextInput(attrs={
-                'class': 'form-control text-primary', 
-                'placeholder': 'Paste link src iframe di sini...'
-            }),
-        }
+from .models import PaketSewa, Galeri, HeroSlider
 
 class PaketSewaForm(forms.ModelForm):
     class Meta:

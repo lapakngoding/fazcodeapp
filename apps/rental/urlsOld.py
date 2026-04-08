@@ -1,4 +1,3 @@
-#apps/rental/urls.py
 from django.urls import path
 from . import views
 
@@ -9,7 +8,6 @@ urlpatterns = [
     path('', views.landing_page, name='landing'),
     
     # Bagian Dashboard (Modular)
-    path('dashboard/profile/', views.edit_profile_web, name='edit_profile_web'),
     path('dashboard/paket/', views.admin_paket_list, name='admin_paket_list'),
     path('dashboard/paket/add/', views.admin_paket_add, name='admin_paket_add'),
     path('dashboard/paket/edit/<int:pk>/', views.admin_paket_edit, name='admin_paket_edit'),
