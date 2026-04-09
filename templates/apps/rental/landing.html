@@ -177,6 +177,9 @@
         position: relative;
         z-index: 2; /* Di atas overlay */
     }
+    section {
+    scroll-margin-top: 35px;
+   }
   </style>
 </head>
 <body>
@@ -314,13 +317,98 @@
   </div>
 </section>
 
-<section id="kontak" class="py-5 text-center text-white" style="background: linear-gradient(45deg, #FF6B00, #FF8800);">
-  <div class="container">
-    <h2 class="fw-bold mb-3">Siap Mengadakan Acara Impian?</h2>
-    <p class="mb-4">Konsultasikan kebutuhan tenda dan dekorasi Anda secara gratis sekarang!</p>
-    <a href="https://wa.me/6281297821314?text=Halo Afifah Kreatif, saya menemukanmu dari website afifahkreatif.com" class="btn btn-light btn-lg px-5 rounded-pill fw-bold text-success" target="_blank">
-      <i class="bi bi-whatsapp me-2"></i>Hubungi WhatsApp
-    </a>
+<section id="kontak" class="py-5 text-white" style="background: linear-gradient(45deg, #FF6B00, #FF8800);">
+  <div class="container py-5">
+    <div class="card border-0 shadow-lg overflow-hidden rounded-4">
+      <div class="row g-0">
+
+        <!-- LEFT SIDE -->
+        <div class="col-lg-4 text-white p-5 d-flex flex-column justify-content-center"
+             style="background: linear-gradient(180deg, #FF7A00, #FF9A2A);">
+
+          <!-- Heading -->
+          <h3 class="fw-bolder mb-2">Hubungi Kami</h3>
+          <p class="small opacity-75 mb-4">
+            Konsultasi gratis, respon cepat.
+          </p>
+
+          <!-- Alamat -->
+          <div class="d-flex mb-3">
+            <div class="flex-shrink-0">
+              <i class="bi bi-geo-alt-fill fs-4"></i>
+            </div>
+            <div class="ms-3">
+              <h6 class="mb-0 fw-bold">Kantor</h6>
+              <p class="small mb-0 opacity-75">{{ webinfo.address }}</p>
+            </div>
+          </div>
+
+          <!-- WhatsApp Card -->
+          <div class="card border-0 shadow-sm rounded-4 p-3 mb-3">
+            <div class="d-flex align-items-start">
+
+              <div class="bg-success bg-opacity-10 text-success rounded-circle d-flex align-items-center justify-content-center"
+                   style="width:50px; height:50px;">
+                <i class="bi bi-whatsapp fs-4"></i>
+              </div>
+
+              <div class="ms-3 w-100">
+                <h6 class="fw-bold mb-1">Telepon / WhatsApp</h6>
+
+                <p class="small text-muted mb-2">
+                  {{ webinfo.phone|default:"-" }} <br>
+                  <span class="text-success fw-semibold">Respon cepat 5–10 menit</span>
+                </p>
+
+                <a href="https://wa.me/62895415109789?text=Halo%20Afifah%20Kreatif,%20saya%20menemukan%20Anda%20dari%20website"
+                   class="btn btn-success btn-sm rounded-pill px-3 fw-semibold"
+                   target="_blank">
+                  <i class="bi bi-whatsapp me-1"></i> Chat Sekarang
+                </a>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Email -->
+          <div class="d-flex mb-4">
+            <div class="flex-shrink-0">
+              <i class="bi bi-envelope-fill fs-4"></i>
+            </div>
+            <div class="ms-3">
+              <h6 class="mb-0 fw-bold">Email Resmi</h6>
+              <p class="small mb-0 opacity-75">{{ webinfo.email|default:"-" }}</p>
+            </div>
+          </div>
+
+          <hr class="opacity-25">
+
+          <!-- Maps Button -->
+          <div class="mt-auto">
+            <a href="https://www.google.com/maps/search/?api=1&query={{ webinfo.address|urlencode }}"
+               target="_blank"
+               class="btn btn-light btn-sm rounded-pill px-4 fw-bold shadow-sm">
+              <i class="bi bi-cursor-fill me-2"></i> Petunjuk Arah
+            </a>
+          </div>
+
+        </div>
+
+        <!-- RIGHT SIDE (MAP) -->
+        <div class="col-lg-8 p-0">
+          <div class="position-relative h-100" style="min-height: 450px;">
+            <iframe
+              class="position-absolute top-0 start-0 w-100 h-100"
+              style="border:0; filter: grayscale(30%) brightness(0.95);"
+              src="{{ webinfo.google_maps_url }}"
+              allowfullscreen=""
+              loading="lazy">
+            </iframe>
+          </div>
+        </div>
+
+      </div>
+    </div>
   </div>
 </section>
 
