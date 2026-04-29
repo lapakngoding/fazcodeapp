@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid">
+    <h1 class="h3 mb-4 text-gray-800">Tambah List Harga</h1>
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <ul class="nav nav-tabs card-header-tabs" id="myTab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active font-weight-bold" id="manual-tab" data-toggle="tab" href="#manual" role="tab">Input Manual</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link font-weight-bold text-success" id="excel-tab" data-toggle="tab" href="#excel" role="tab">
+                        <i class="fas fa-file-excel mr-1"></i> Upload Excel
+                    </a>
+                </li>
+            </ul>
+        </div>
+        
+        <div class="card-body">
+            <div class="tab-content" id="myTabContent">
+                
+                <div class="tab-pane fade show active py-3" id="manual" role="tabpanel">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label>Deskripsi</label>{{ form.deskripsi }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label>Kategori</label>{{ form.kategori }}
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label>Qty</label>{{ form.qty }}
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label>Satuan</label>{{ form.satuan }}
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label>Harga (Rp)</label>{{ form.harga }}
+                            </div>
+                            <div class="col-12 mb-3">
+                                <div class="custom-control custom-checkbox">
+                                    {{ form.per_hari }}
+                                    <label class="ml-2">Berlaku Per Hari?</label>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" name="submit_manual" class="btn btn-primary">Simpan Data</button>
+                    </form>
+                </div>
+
+                <div class="tab-pane fade py-3" id="excel" role="tabpanel">
+                    <div class="alert alert-info py-2">
+                        <small>Pastikan kolom Excel Anda memiliki judul: <b>deskripsi, kategori, qty, satuan, harga, per_hari</b></small>
+                    </div>
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label>Pilih File Excel</label>
+                            {{ excel_form.as_p }}
+                        </div>
+                        <button type="submit" name="submit_excel" class="btn btn-success">
+                            <i class="fas fa-upload mr-1"></i> Mulai Upload
+                        </button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

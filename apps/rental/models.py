@@ -10,6 +10,47 @@ class NamaWebsite(models.Model):
     def __str__(self):
         return self.nama_web
 
+class ListHarga(models.Model):
+    # Pilihan Satuan (agar data konsisten)
+    UNIT_CHOICES = [
+        ('meter', 'Meter'),
+        ('unit', 'Unit'),
+        ('pcs', 'Pcs'),
+        ('set', 'Set'),
+    ]
+
+    deskripsi = models.CharField(max_length=255) # 100 terkadang terlalu sempit
+    kategori = models.CharField(max_length=100)
+    qty = models.PositiveIntegerField(default=1)
+    satuan = models.CharField(
+        max_length=20, 
+        choices=UNIT_CHOICES, 
+        default='unit'
+    )
+    
+    per_hari = models.BooleanField(
+        default=False, 
+        help_text="Centang jika harga berlaku per hari"
+    )
+    
+    harga = models.DecimalField(max_digits=12, decimal_places=0)
+    
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name_plural = "List Harga"
+        ordering = ['-created_at'] # Menampilkan yang terbaru di atas
+
+    def __str__(self):
+        return f"{self.deskripsi} ({self.kategori})"
+
+    @property
+    def harga_format(self):
+        # Format angka ke ribuan Indonesia
+        return f"Rp {int(self.harga):,}".replace(",", ".")
+
+
 class PaketSewa(models.Model):
     nama = models.CharField(max_length=100)
     harga = models.DecimalField(max_digits=12, decimal_places=0) # Misal: 1500000

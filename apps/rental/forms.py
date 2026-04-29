@@ -1,5 +1,5 @@
 from django import forms
-from .models import PaketSewa, Galeri, HeroSlider, NamaWebsite
+from .models import PaketSewa, Galeri, HeroSlider, NamaWebsite, ListHarga
 
 class NamaWebsiteForm(forms.ModelForm):
     class Meta:
@@ -62,3 +62,22 @@ class HeroSliderForm(forms.ModelForm):
             'order': forms.NumberInput(attrs={'class': 'form-control'}),
             'is_active': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
         }
+
+class ListHargaForm(forms.ModelForm):
+    class Meta:
+        model = ListHarga
+        fields = ['deskripsi', 'kategori', 'qty', 'satuan', 'per_hari', 'harga']
+        widgets = {
+            'deskripsi': forms.TextInput(attrs={'class': 'form-control'}),
+            'kategori': forms.TextInput(attrs={'class': 'form-control'}),
+            'qty': forms.NumberInput(attrs={'class': 'form-control'}),
+            'satuan': forms.Select(attrs={'class': 'form-control'}), # Jika pakai choices
+            'harga': forms.NumberInput(attrs={'class': 'form-control'}),
+        }
+
+class ExcelUploadForm(forms.Form):
+    file_excel = forms.FileField(
+        label="Pilih File Excel",
+        help_text="Format file harus .xlsx atau .xls",
+        widget=forms.FileInput(attrs={'class': 'form-control-file'})
+    )

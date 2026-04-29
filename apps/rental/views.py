@@ -1,10 +1,11 @@
+import pandas as pd
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from apps.accounts.decorators import admin_only
 from apps.dashboard.models import AuditLog # Tetap bisa akses model AuditLog
-from .models import PaketSewa, Galeri, HeroSlider, NamaWebsite
-from .forms import PaketSewaForm, GaleriForm, HeroSliderForm, NamaWebsiteForm
+from .models import PaketSewa, Galeri, HeroSlider, NamaWebsite, ListHarga
+from .forms import PaketSewaForm, GaleriForm, HeroSliderForm, NamaWebsiteForm, ListHargaForm, ExcelUploadForm
 
 def get_client_ip(request):
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
@@ -26,6 +27,27 @@ def edit_profile_web(request):
         form = NamaWebsiteForm(instance=profile)
         
     return render(request, 'apps/rental/dashboard/edit_profile.html', {'form': form})
+
+@login_required
+@admin_only
+def admin_konten_list(request):
+    context = {
+        'total_paket': PaketSewa.objects.count(),
+        'list_harga': ListHarga.objects.count(),
+        'list_galeri': Galeri.objects.count(),
+        'list_Banner': HeroSlider.objects.count(),
+    }
+    return render(request, 'apps/rental/dashboard/konten_list.html', context)
+
+@login_required
+@admin_only
+def admin_list_harga(request):
+    listharga = ListHarga.objects.all().order_by('-created_at')
+    context = {
+        'listharga': listharga,
+        'total_item': listharga.count(),
+    }
+    return render(request, 'apps/rental/dashboard/list_harga.html', context)
 
 @login_required
 @admin_only
@@ -193,3 +215,48 @@ def admin_hero_delete(request, pk):
         slide.delete()
         messages.success(request, f"Slide '{judul}' berhasil dihapus.")
     return redirect('rental:admin_hero_list')
+
+@login_required
+@admin_only
+def input_harga_view(request):
+    form = ListHargaForm()
+    excel_form = ExcelUploadForm()
+
+    if request.method == 'POST':
+        # Logika 1: Input Manual
+        if 'submit_manual' in request.POST:
+            form = ListHargaForm(request.POST)
+            if form.is_valid():
+                form.save()
+                messages.success(request, "Data berhasil ditambah secara manual!")
+                return redirect('rental:admin_list_harga')
+
+        # Logika 2: Upload Excel
+        elif 'submit_excel' in request.POST:
+            excel_form = ExcelUploadForm(request.POST, request.FILES)
+            if excel_form.is_valid():
+                file = request.FILES['file_excel']
+                print(f"File diterima: {file.name}")
+                try:
+                    df = pd.read_excel(file)
+                    
+                    # Looping data dari Excel ke Database
+                    for _, row in df.iterrows():
+                        ListHarga.objects.create(
+                            deskripsi=row['deskripsi'],
+                            kategori=row['kategori'],
+                            qty=row['qty'],
+                            satuan=row['satuan'],
+                            per_hari=row.get('per_hari', False), # Default False jika kolom tdk ada
+                            harga=row['harga']
+                        )
+                    messages.success(request, f"Berhasil mengimpor {len(df)} data dari Excel!")
+                except Exception as e:
+                    messages.error(request, f"Gagal upload: {str(e)}")
+                
+                return redirect('rental:admin_list_harga')
+
+    return render(request, 'apps/rental/dashboard/input_harga.html', {
+        'form': form,
+        'excel_form': excel_form
+    })

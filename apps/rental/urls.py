@@ -10,6 +10,9 @@ urlpatterns = [
     
     # Bagian Dashboard (Modular)
     path('dashboard/profile/', views.edit_profile_web, name='edit_profile_web'),
+    path('dashboard/list/konten', views.admin_konten_list, name='admin_konten_list'),
+    path('dashboard/list/harga', views.admin_list_harga, name='admin_list_harga'),
+    path('dashboard/input/harga', views.input_harga_view, name='admin_input_harga'),
     path('dashboard/paket/', views.admin_paket_list, name='admin_paket_list'),
     path('dashboard/paket/add/', views.admin_paket_add, name='admin_paket_add'),
     path('dashboard/paket/edit/<int:pk>/', views.admin_paket_edit, name='admin_paket_edit'),
